@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mns:nffgType xmlns:mns="http://service.sol3.NFFG.dp2.polito.it"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://service.sol3.NFFG.dp2.polito.it inputVerifier.xsd"
+	name="N1" date="2016-03-20T20:32:50">
+			<nodeSet>
+				<node name="A1" type="NAT" />
+				<node name="A2" type="FW" />
+				<node name="A3" type="DPI" />
+				<node name="A4" type="CACHE" />
+				<node name="A5" type="CACHE" />
+				<node name="A6" type="CACHE" />
+				<node name="A7" type="CACHE" />
+			</nodeSet>
+			<linkSet>
+				<link name="B1">
+					<srcNode>A1</srcNode>
+					<dstNode>A2</dstNode>
+				</link>
+				<link name="B2">
+					<srcNode>A3</srcNode>
+					<dstNode>A4</dstNode>
+				</link>
+				<link name="B3">
+					<srcNode>A7</srcNode>
+					<dstNode>A3</dstNode>
+				</link>
+				<link name="B4">
+					<srcNode>A2</srcNode>
+					<dstNode>A7</dstNode>
+				</link>
+			</linkSet>
+		</mns:nffgType>

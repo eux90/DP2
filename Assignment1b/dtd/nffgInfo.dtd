@@ -1,0 +1,39 @@
+<!ELEMENT nffgInfo (nffgSet,policySet)>
+<!ELEMENT nffgSet (nffg*)>
+<!ELEMENT nffg (nodeSet,linkSet)>
+<!ATTLIST nffg
+		name ID #REQUIRED
+		date CDATA #REQUIRED>
+<!ELEMENT nodeSet (node*)>
+<!ELEMENT node EMPTY>
+<!ATTLIST node
+		name CDATA #REQUIRED
+		type (CACHE|DPI|FW|MAIL_CLIENT|NAT|SPAM|VPN|WEB_CLIENT|WEB_SERVER) #REQUIRED>
+<!ELEMENT linkSet (link*)>
+<!ELEMENT link (srcNode,dstNode)>
+<!ATTLIST link
+		name CDATA #REQUIRED>
+<!ELEMENT srcNode (#PCDATA)>
+<!ELEMENT dstNode (#PCDATA)>
+<!ELEMENT policySet (rchPolicySet,trvPolicySet)>
+<!ELEMENT rchPolicySet (rchPolicy*)>
+<!ELEMENT rchPolicy (verification?,isPositive,srcNode,dstNode)>
+<!ATTLIST rchPolicy
+		name ID #REQUIRED
+		nffg IDREF #REQUIRED>
+<!ELEMENT isPositive (#PCDATA)>
+<!ELEMENT verification (result,message,date)>
+<!ELEMENT result (#PCDATA)>
+<!ELEMENT message (#PCDATA)>
+<!ELEMENT date (#PCDATA)>
+<!ELEMENT trvPolicySet (trvPolicy*)>
+<!ELEMENT trvPolicy (verification?,isPositive,srcNode,dstNode,functionList)>
+<!ATTLIST trvPolicy
+		name ID #REQUIRED
+		nffg IDREF #REQUIRED>
+<!ELEMENT functionList (#PCDATA)>
+		
+		
+		
+		
+ 

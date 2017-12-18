@@ -1,0 +1,12 @@
+The dtd file has been designed to verify the same document structure of schema file,
+(watch schema doc for details about structure), due to the limits of dtd no many constraints can be checked.
+In particular was not possible to define name of nodes and links as ID type because they can be repeated
+in different NFFGs, furthermore the ID type covers only uniqueness not syntax constraints.
+
+Constraints checked in the dtd:
+-NFFG have a name that's unique in the document
+-Policies have a name that's unique in the document
+-Policies attribute "nffg" is of type IDREF so should point to an existing ID
+(but there is no way to verify that it points to an NFFG)
+-Node attribute "type" must have a correct syntax referencing a defined functionalType.
+-if a policy is verified it should have elements: result, message, date (but no way to check that they are not empty).

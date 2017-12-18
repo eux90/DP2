@@ -1,0 +1,29 @@
+Elements are divided by type: NFFG and Policies are part of two different sets inside the root
+and inside each NFFG there are 2 separate sets one for Nodes and the other for Links. Even Policies are
+partitioned into 2 separate sets one for Reachability and one for Traversal policies 
+This partition brings flexibility making easy the addition in the future of new kind of elements, (eg new policy types).
+Syntax peculiarities of schema have been used to avoid repetition in the definition of elements:
+source and destination nodes are defined in a group type that is used both for links and policies.
+For the definition of Policies the extension mechanism is used: TraversalPolicy is an extension
+of ReachabilityPolicy, that extends a base type GeneralPolicy.
+
+The definition of Links and Nodes in two separate sets is in contrast with the interface documentation
+where is defined a method that from a Node retrieve the set of his Links, this partition will slow down this operation
+but brings the advantage that all Links are put together, so debugging the application by inspecting the XML
+will be more easy, and the XML output will be more human readable.
+
+Many checks and constraints have been implemented in the schema:
+
+- syntax and uniqueness of NFFG names inside the NFFG Set.
+- syntax and uniqueness of Node names inside a NFFG.
+- syntax and uniqueness of Link names inside a NFFG.
+- syntax and uniqueness of Policy names inside the Policy Set.
+- Policies refers existing NFFGs.
+- source and destination nodes of a link must be consistent with Nodes declared in the belonging NFFG.
+- source node and destination nodes must be different in links.
+- FunctionalTypes in Nodes and the list of FunctionalTypes in Traversal Policies are checked in the syntax.
+- if a policy has been verified it must have: A verification result, a message (may be empty) and a date of verification.
+- dates are of DateTime data type, true/false elements are of Boolean data type
+- every element is consistent with the interface documentation.
+
+file: nffgInfo.xml can be used to check quickly those constraints.

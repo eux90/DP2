@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://service.sol3.NFFG.dp2.polito.it"
+	xmlns:tns="http://service.sol3.NFFG.dp2.polito.it">
+
+	<!-- Whole Database -->
+	<element name="nffgInfoType">
+		<complexType>
+			<sequence>
+				<element name="links" type="tns:linksType" minOccurs="0" maxOccurs="1" />
+				<element ref="tns:nffgSetType" />
+				<element ref="tns:policySetType" />
+			</sequence>
+		</complexType>
+		<!-- each Policy refer to an existing NFFG -->
+		<keyref name="nffgRef" refer="tns:nffgSetKey">
+			<selector xpath="tns:policySetType/*/*" />
+			<field xpath="@nffg" />
+		</keyref>
+	</element>
+	
+		
+	<!-- single NFFG -->
+	<element name="nffgType">
+	<complexType>
+		<sequence>
+			<element name="links" type="tns:linksType" minOccurs="0" maxOccurs="1" />
+			<element name="nodeSet" type="tns:nodeSetType">
+			
+				<!-- each nodeName is unique inside a nodeSet -->
+				<key name="nodeKey">
+					<selector xpath="node" />
+					<field xpath="@name" />
+				</key>
+			</element>
+			<element name="linkSet" type="tns:linkSetType">
+			
+				<!-- each linkName is unique inside a linkSet -->
+				<key name="linkKey">
+					<selector xpath="link" />
+					<field xpath="@name" />
+				</key>
+				
+					
+			</element>
+		</sequence>
+		<attribute name="name" type="tns:IDType" use="required"/>
+		<attribute name="date" type="dateTime" use="required" />
+	</complexType>
+	<keyref name="nodeRef1" refer="tns:nodeKey">
+					<selector xpath="linkSet/link/*" />
+					<field xpath="." />
+				</keyref>
+	</element>
+	
+	<!-- container for NFFGs -->
+	<element name="nffgSetType">
+		<complexType>
+			<sequence>
+			<element name="links" type="tns:linksType" minOccurs="0" maxOccurs="1" />
+				<element ref="tns:nffgType" minOccurs="0"
+				maxOccurs="unbounded" />
+			</sequence>
+		</complexType>
+		<!-- each NFFG has a unique name in the NFFG Set -->
+		<key name="nffgSetKey">
+			<selector xpath="tns:nffgType" />
+			<field xpath="@name" />
+		</key>
+	</element>
+	
+	<!-- single policy RCH or TRV -->
+	<element name="policyType">
+		<complexType>
+		<sequence>
+		<element name="links" type="tns:linksType" minOccurs="0" maxOccurs="1" />
+    		<choice>
+      			<element name="rchPolicy" type="tns:rchPolicyType" />
+      			<element name="trvPolicy" type="tns:trvPolicyType" />
+    		</choice>
+    		</sequence>
+  		</complexType>
+  	</element>
+	
+	<!-- container for Policies -->
+	<element name="policySetType">
+	<complexType>
+		<sequence>
+			<element name="links" type="tns:linksType" minOccurs="0" maxOccurs="1" />
+			<element name="rchPolicySet" type="tns:rchPolicySetType" />
+			<element name="trvPolicySet" type="tns:trvPolicySetType" />
+		</sequence>
+	</complexType>
+	<!-- each Policy has a unique name in the Policy Set -->
+	<key name="policySetKey">
+			<selector xpath="*/*" />
+			<field xpath="@name" />
+		</key>
+	</element>
+	
+	<!-- START POLICIES SET DEFINITION -->
+	
+	<!-- container for ReachabilityPolicies -->
+	<complexType name="rchPolicySetType">
+		<sequence>
+			<element name="rchPolicy" type="tns:rchPolicyType" minOccurs="0"
+				maxOccurs="unbounded" />
+		</sequence>
+	</complexType>
+	
+	<!-- container for TraversalPolicies -->
+	<complexType name="trvPolicySetType">
+		<sequence>
+			<element name="trvPolicy" type="tns:trvPolicyType" minOccurs="0"
+				maxOccurs="unbounded" />
+		</sequence>
+	</complexType>
+	
+	<!-- END POLICIES SET DEFINITION -->
+	
+	<!-- START POLICIES DEFINITION -->
+	
+	<!-- definition of a GeneralPolicy -->
+	<complexType name="generalPolicyType">
+		<sequence>
+			<element name="links" type="tns:linksType" minOccurs="0" maxOccurs="1" />
+			<element name="verification" type="tns:verificationType" minOccurs="0" maxOccurs="1"/>
+			<element name="isPositive" type="boolean" />
+		</sequence>
+		<attribute name="name" type="tns:IDType" use="required"/>
+		<attribute name="nffg" type="tns:IDType" use="required"/>
+	</complexType>
+
+	<!-- if a policy is verified should have those elements -->
+	<complexType name="verificationType">
+		<sequence>
+			<element name="result" type="boolean" />
+			<element name="message" type="string" />
+			<element name="date" type="dateTime" />
+		</sequence>
+	</complexType>
+	
+	<!-- definition of a ReachabilityPolicy -->
+	<complexType name="rchPolicyType">
+		<complexContent>
+			<extension base="tns:generalPolicyType">
+				<group ref="tns:srcAndDstNodeGroup" />
+			</extension>
+		</complexContent>
+	</complexType>
+	
+	<!-- definition of a TraversalPolicy -->
+	<complexType name="trvPolicyType">
+		<complexContent>
+			<extension base="tns:rchPolicyType">
+				<sequence>
+					<element name="functionList" type="tns:functionListType" />
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	
+	<!-- definition of the FunctionList of a TraversalPolicy -->
+	<simpleType name="functionListType">
+		<list itemType="tns:funcType"/>
+	</simpleType>
+	
+	<!-- END POLICIES DEFINITION -->
+	
+	
+	<!-- START NFFG DEFINITION -->
+	
+	<!-- general container for Nodes -->
+	<complexType name="nodeSetType">
+		<sequence>
+			<element name="node" type="tns:nodeType" minOccurs="0"
+				maxOccurs="unbounded" />
+		</sequence>
+	</complexType>
+
+	<!-- general container for Links -->
+	<complexType name="linkSetType">
+		<sequence>
+			<element name="link" type="tns:linkType" minOccurs="0"
+				maxOccurs="unbounded">
+				
+				<!-- source and destination node should be different in a link -->
+				<unique name="sourceAndDestinationDifferent">
+					<selector xpath="srcNode | dstNode" />
+					<field xpath="." />
+				</unique>
+			</element>
+		</sequence>
+	</complexType>
+
+	<!-- definition of a Node -->
+	<complexType name="nodeType">
+		<attribute name="name" type="tns:IDType" use="required"/>
+		<attribute name="type" type="tns:funcType" use="required"/>
+	</complexType>
+
+	<!-- definition of a Link -->
+	<complexType name="linkType">
+		<group ref="tns:srcAndDstNodeGroup" />
+		<attribute name="name" type="tns:IDType" use="required"/>
+	</complexType>
+	
+	<!-- END NFFG DEFINITION -->
+	
+	<!-- a list of ID elements -->
+	<element name="IDListType">
+	<simpleType>
+		<list itemType="tns:IDType" />
+	</simpleType>
+	</element>
+	
+	<!-- definition of a unique identifier -->
+	<simpleType name="IDType">
+		<restriction base="string">
+			<pattern value="[a-zA-Z]+[a-zA-Z0-9]*" />
+		</restriction>
+	</simpleType>
+	
+	<!-- definition of FunctionalTypes -->
+	<simpleType name="funcType">
+		<restriction base="string">
+			<enumeration value="CACHE" />
+			<enumeration value="DPI" />
+			<enumeration value="FW" />
+			<enumeration value="MAIL_CLIENT" />
+			<enumeration value="MAIL_SERVER" />
+			<enumeration value="NAT" />
+			<enumeration value="SPAM" />
+			<enumeration value="VPN" />
+			<enumeration value="WEB_CLIENT" />
+			<enumeration value="WEB_SERVER" />
+		</restriction>
+	</simpleType>
+	
+	<!-- definition of a pair of Source and Destination Nodes -->
+	<group name="srcAndDstNodeGroup">
+		<sequence>
+			<element name="srcNode" type="tns:IDType" />
+			<element name="dstNode" type="tns:IDType" />
+		</sequence>
+	</group>
+	
+	<!-- definition of a web link -->
+	<complexType name="linkRefType">
+	<attribute name="rel" type="string" use="required" />
+	<attribute name="href" type="anyURI" use="required" />
+	</complexType>
+	
+	<!-- definition of a web link container -->
+	<complexType name="linksType">
+	<sequence>
+	<element name="link" type="tns:linkRefType" minOccurs="0" maxOccurs="unbounded" />
+	</sequence>
+	</complexType>
+
+</schema>
+	

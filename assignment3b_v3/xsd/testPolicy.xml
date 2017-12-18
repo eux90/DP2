@@ -1,0 +1,13 @@
+<mns:policyType xmlns:mns="http://service.sol3.NFFG.dp2.polito.it"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://service.sol3.NFFG.dp2.polito.it nffgVerifier.xsd">
+	
+			
+			<trvPolicy name="P3" nffg="N1">
+				<isPositive>1</isPositive>
+				<srcNode>A1</srcNode>
+				<dstNode>A2</dstNode>
+				<functionList>NAT FW</functionList>
+			</trvPolicy>
+	
+	</mns:policyType>

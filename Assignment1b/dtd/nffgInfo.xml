@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nffgInfo SYSTEM "nffgInfo.dtd">
+<nffgInfo>
+	<nffgSet>
+		<nffg name="N1" date="2016-03-20T20:32:50">
+			<nodeSet>
+				<node name="A1" type="NAT" />
+				<node name="A2" type="FW" />
+				<node name="A3" type="DPI" />
+				<node name="A4" type="CACHE" />
+			</nodeSet>
+			<linkSet>
+				<link name="L1">
+					<srcNode>A1</srcNode>
+					<dstNode>A3</dstNode>
+				</link>
+				<link name="L2">
+					<srcNode>A3</srcNode>
+					<dstNode>A4</dstNode>
+				</link>
+			</linkSet>
+		</nffg>
+		<nffg name="N2" date="2016-04-22T20:32:50">
+			<nodeSet>
+				<node name="A1" type="NAT" />
+				<node name="A2" type="FW" />
+				<node name="A5" type="DPI" />
+				<node name="A6" type="CACHE" />
+			</nodeSet>
+			<linkSet>
+				<link name="L1">
+					<srcNode>A1</srcNode>
+					<dstNode>A2</dstNode>
+				</link>
+				<link name="L2">
+					<srcNode>A5</srcNode>
+					<dstNode>A6</dstNode>
+				</link>
+			</linkSet>
+		</nffg>
+		</nffgSet>
+	<policySet>
+		<rchPolicySet>
+			<rchPolicy name="P1" nffg="N1">
+				<isPositive>1</isPositive>
+				<srcNode>A1</srcNode>
+				<dstNode>A2</dstNode>
+			</rchPolicy>
+			<rchPolicy name="P2" nffg="N1">
+				<verification>
+					<result>0</result>
+					<message>Hello</message>
+					<date>2016-04-22T20:32:50</date>
+				</verification>
+				<isPositive>1</isPositive>
+				<srcNode>A1</srcNode>
+				<dstNode>A2</dstNode>
+			</rchPolicy>
+		</rchPolicySet>
+		<trvPolicySet>
+			<trvPolicy name="P3" nffg="N2">
+				<isPositive>1</isPositive>
+				<srcNode>A1</srcNode>
+				<dstNode>A2</dstNode>
+				<functionList>NAT FW</functionList>
+			</trvPolicy>
+		</trvPolicySet>
+	</policySet>
+</nffgInfo>
